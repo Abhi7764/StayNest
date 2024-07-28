@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV != 'production') {
   require("dotenv").config();
 }
-// console.log(process.env.SECRET);
 
 const express = require("express");
 const app = express();
@@ -42,7 +41,7 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 const sessionOptions = {
   // store: store,
-  secret: "mysupersecretcode",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -51,12 +50,6 @@ const sessionOptions = {
     httpOnly: true,
   }
 }
-
-// app.get("/", (req, res) => {
-//   res.send("Hi, I am root");
-// });
-
-
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -73,7 +66,6 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currUser = req.user;
-  // console.log(res.locals.success);
   next();
 })
 
